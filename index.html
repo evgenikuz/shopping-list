@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping List</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Shopping List</h1>
+        <div class="shopping-list">
+            <form>
+                <input type="text" class="input-form" name="toDoInput" id="toDoInput" placeholder="Задание на сегодня">
+                <input type="submit" class="submit-btn" value="Добавить">
+            </form>
+            <div class="tasks">
+                 <div class="task">
+                    <label>
+                        <input type="checkbox" class="task__checkbox visually-hidden" name="task1" id="task1">
+                        <span class="custom-checkbox"></span>
+                        <p for="task1" class="task__text">Сделать удаление каждого элемента по крестику справа</p>
+                    </label>
+                    <button class="task__delete-btn">❌</button>
+                </div>
+                <div class="task">
+                    <label>
+                        <input type="checkbox" class="task__checkbox visually-hidden" name="task1" id="task1">
+                        <span class="custom-checkbox"></span>
+                        <p for="task1" class="task__text">Сделать удаление каждого элемента по крестику справа</p>
+                    </label>
+                    <button class="task__delete-btn">❌</button>
+                </div>
+            </div>
+            <div class="delete-block">
+                <button class="delete-block__delete-checked">Удалить завершенные</button>
+                <button class="delete-block__delete-all">Удалить все</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="./script.js"></script>
+</body>
+</html>
