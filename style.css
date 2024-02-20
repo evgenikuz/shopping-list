@@ -70,7 +70,7 @@ form {
     background: transparent;
     color: rgb(39, 40, 41);
 }
-.tasks {
+.shopping-list__main {
     display: flex;
     flex-direction: column;
     border-top: 1px solid rgb(222, 226, 230);
@@ -78,7 +78,7 @@ form {
     width: 100%;
     gap: 26px;
 }
-.task {
+.note {
     display: flex;
     justify-content: space-between;
 }
@@ -92,36 +92,67 @@ form {
     clip: rect(0 0 0 0);
     overflow: hidden;
 }
-.custom-checkbox {
+.note__custom-checkbox {
     position:absolute;
     width: 16px;
     height: 16px;
     background-image: url('./checkbox.svg');
     margin-top:2px;
 }
-.task__checkbox:checked + .custom-checkbox {
+.note__checkbox:checked + .note__custom-checkbox {
     background-image: url('./checkboxSelected.svg');
 }
-.task__text {
+label {
+    /* width: 100%; */
+}
+.note__text {
     margin-left: 32px;
     color: rgb(84, 89, 94);
     font-weight: 400;
     line-height: 21px;
     text-align: left;
     cursor: pointer;
+    max-width: fit-content;
+}
+.note__input {
+    margin-left: 32px;
+    margin-top: -19px;
+    box-sizing: border-box;
+    border: 1px solid rgb(206, 212, 218);
+    border-radius: 4px; 
+    background: rgb(255, 255, 255);
+    height: 38px;
+    width: 100%;
+    max-width: fit-content;
 }
 .checked {
     color: rgb(84, 89, 94);
     text-decoration-line: line-through;
 }
-.task__delete-btn {
+.note__button-container {
+    display: flex;
+    gap: 16px;
+    max-width: 48px;
+    width: 100%;
+    margin-top: -10.5px;
+}
+.note__edit-btn {
     border: none;
     background: transparent;
     cursor: pointer;
     transition: 0.3s;
 }
-.task__delete-btn:hover {
-    transform: rotate(90deg);
+.note__edit-btn:hover {
+    transform: scale(1.1);
+}
+.note__delete-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.note__delete-btn:hover {
+    transform: scale(1.1);
 }
 .delete-block {
     background: rgb(245, 245, 245);

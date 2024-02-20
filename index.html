@@ -14,29 +14,36 @@
     <div class="container">
         <h1 class="title">Shopping List</h1>
         <div class="shopping-list">
-            <form>
+            <form class="shopping-list__header">
                 <input type="text" class="input-form" name="toDoInput" id="toDoInput" placeholder="Задание на сегодня">
                 <input type="submit" class="submit-btn" value="Добавить">
             </form>
-            <div class="tasks">
-                 <div class="task">
+            <div class="shopping-list__main d-none">
+                 <!-- <div class="note">
                     <label>
-                        <input type="checkbox" class="task__checkbox visually-hidden" name="task1" id="task1">
-                        <span class="custom-checkbox"></span>
-                        <p for="task1" class="task__text">Сделать удаление каждого элемента по крестику справа</p>
+                        <input type="checkbox" class="note__checkbox visually-hidden" id="note1">
+                        <span class="note__custom-checkbox"></span>
+                        <p class="note__text">Сделать удаление каждого элемента по крестику справа</p>
+                        <input class="note__input d-none" type="text" >
                     </label>
-                    <button class="task__delete-btn">❌</button>
+                    <div class="note__button-container">
+                        <button class="note__edit-btn">✅</button>
+                        <button class="note__delete-btn">🗑</button>
+                    </div>
                 </div>
-                <div class="task">
+                <div class="note">
                     <label>
-                        <input type="checkbox" class="task__checkbox visually-hidden" name="task1" id="task1">
-                        <span class="custom-checkbox"></span>
-                        <p for="task1" class="task__text">Сделать удаление каждого элемента по крестику справа</p>
+                        <input type="checkbox" class="note__checkbox visually-hidden" id="note1">
+                        <span class="note__custom-checkbox"></span>
+                        <p class="note__text">Купить хлеб</p>
                     </label>
-                    <button class="task__delete-btn">❌</button>
-                </div>
+                    <div class="note__button-container">
+                        <button class="note__edit-btn">✏️</button>
+                        <button class="note__delete-btn">🗑</button>
+                    </div>
+                </div> -->
             </div>
-            <div class="delete-block">
+            <div class="shopping-list__footer delete-block d-none">
                 <button class="delete-block__delete-checked">Удалить завершенные</button>
                 <button class="delete-block__delete-all">Удалить все</button>
             </div>
