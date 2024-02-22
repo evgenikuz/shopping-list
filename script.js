@@ -32,7 +32,7 @@ function addNote(noteText,isChecked = false) {
         <input type="checkbox" class="note__checkbox visually-hidden" id="${noteCounter}" ${isChecked ? 'checked' : ''}>
         <span class="note__custom-checkbox"></span>
         <p class="note__text ${isChecked ? 'checked' : ''}">${noteText}</p>
-        <input class="note__input d-none" type="text" >
+        <input class="note__input d-none" type="text" value = '${noteText}'>
     </label>
     <div class="note__button-container">
         <button class="note__edit-btn">✏️</button>
@@ -59,9 +59,9 @@ shoppingList.addEventListener('click', function(e) {
         toCheckId = e.target.closest('label').querySelector('.note__checkbox').getAttribute('id');
         e.target.closest('.note').querySelector('.note__text').classList.toggle('checked');
         e.target.closest('.note').querySelector('.note__checkbox').checked ? checkNote(toCheckId) : uncheckNote(toCheckId);
-    } else if (e.target.classList.contains('note__delete-btn')){ // если нажали на крестик
+    } else if (e.target.classList.contains('note__delete-btn')){ // если нажали на урну
         let id = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
-        deleteTask(id, localStorage);
+        deleteNote(id, localStorage);
         e.target.closest('.note').remove(); // удаляем задание
         isLast(localStorage); // проверка на последний элемент в массиве
     } else if (e.target.classList.contains('delete-block__delete-checked')){ // если нажали на удалить завершенные
@@ -75,6 +75,24 @@ shoppingList.addEventListener('click', function(e) {
         isLast(localStorage); // проверка на последний элемент в массиве
     } else if (e.target.classList.contains('delete-block__delete-all')){ // если нажали на удалить все
         deleteAll(shoppingListMain)
+    } else if (e.target.classList.contains('note__edit-btn')) {
+        let editButton = e.target.closest('.note').querySelector('.note__edit-btn');
+        let text = e.target.closest('.note').querySelector('.note__text');
+        let noteInput = e.target.closest('.note').querySelector('.note__input');
+        let editedId = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
+        if(editButton.innerHTML === '✏️') { 
+            editButton.innerHTML = '✅';
+            text.classList.add('d-none');
+            noteInput.classList.remove('d-none');
+        }
+        if(editButton.innerHTML === '✅') {
+            editButton.addEventListener('click', function() {
+                editNote(editedId, noteInput.value);
+                editButton.innerHTML = '✏️';
+                text.classList.remove('d-none');
+                noteInput.classList.add('d-none');
+            });
+        }
     }
 })
 
@@ -121,4 +139,12 @@ function deleteAll(notes) { // удаляем со страницы все за�
     noteArray = [];
     shoppingListMain.classList.add('d-none');
     shoppingListFooter.classList.add('d-none');
+}
+function editNote(id, value) {
+    for (obj of noteArray) {
+        if(obj.id === +id) {
+            obj.text = value;
+            localStorage.setItem('notes', JSON.stringify(noteArray))
+        }
+    }
 }
