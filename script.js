@@ -7,9 +7,10 @@ let noteCounter = 0;
 let localStorage = window.localStorage;
 let noteArray = [];
 
+let firstLetter = (str) => str.split('')[0].toUpperCase() + str.slice(1)
+
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-    let firstLetter = (str) => str.split('')[0].toUpperCase() + str.slice(1);
     if (inputForm.value === '') {
         inputForm.classList.add('error')
     } else {
@@ -53,12 +54,12 @@ if(localStorage.notes) {
         addNote(el.text, el.isChecked);
     }
 }
-
+let isEdited = false;
 shoppingList.addEventListener('click', function(e) {
     if(e.target.classList.contains('note__checkbox' || 'note__custom-checkbox' || 'note__text')){
-        toCheckId = e.target.closest('label').querySelector('.note__checkbox').getAttribute('id');
+        let id = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
         e.target.closest('.note').querySelector('.note__text').classList.toggle('checked');
-        e.target.closest('.note').querySelector('.note__checkbox').checked ? checkNote(toCheckId) : uncheckNote(toCheckId);
+        e.target.closest('.note').querySelector('.note__checkbox').checked ? checkNote(id) : uncheckNote(id);
     } else if (e.target.classList.contains('note__delete-btn')){ // если нажали на урну
         let id = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
         deleteNote(id, localStorage);
@@ -75,23 +76,46 @@ shoppingList.addEventListener('click', function(e) {
         isLast(localStorage); // проверка на последний элемент в массиве
     } else if (e.target.classList.contains('delete-block__delete-all')){ // если нажали на удалить все
         deleteAll(shoppingListMain)
-    } else if (e.target.classList.contains('note__edit-btn')) {
+    } else if (e.target.classList.contains('note__edit-btn') && isEdited === true) {
+        console.log('Нельзя редактировать 2 записи сразу');
+    } else if (e.target.classList.contains('note__edit-btn') && isEdited === false) {
+        let id = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
         let editButton = e.target.closest('.note').querySelector('.note__edit-btn');
-        let text = e.target.closest('.note').querySelector('.note__text');
+        let noteText = e.target.closest('.note').querySelector('.note__text');
         let noteInput = e.target.closest('.note').querySelector('.note__input');
-        let editedId = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
-        if(editButton.innerHTML === '✏️') { 
-            editButton.innerHTML = '✅';
-            text.classList.add('d-none');
-            noteInput.classList.remove('d-none');
-        }
-        if(editButton.innerHTML === '✅') {
-            editButton.addEventListener('click', function() {
-                editNote(editedId, noteInput.value);
-                editButton.innerHTML = '✏️';
-                text.classList.remove('d-none');
-                noteInput.classList.add('d-none');
-            });
+        isEdited = true;
+        editButton.innerHTML = '✅';
+        noteText.classList.add('d-none');
+        noteInput.classList.remove('d-none');
+        if (editButton.innerHTML === '✅') {
+            noteInput.onkeypress = function(e) { // работает
+                let key = e.which || e.keyCode
+                if (key === 13) {
+                    if(noteInput.value.trim() === '') {
+                        noteInput.classList.add('error')
+                    } else {
+                        editNote(id, firstLetter(noteInput.value.trim()));
+                        noteText.innerHTML = firstLetter(noteInput.value.trim());
+                        editButton.innerHTML = '✏️';
+                        noteText.classList.remove('d-none');
+                        noteInput.classList.add('d-none');
+                        isEdited = false
+                    }
+                }
+            }
+            // editButton.addEventListener('click', function() { // не работает из-за нажатия на кнопку повторного стр 79
+            // if(noteInput.value.trim() === '') {
+            //     noteInput.classList.add('error')
+            // } else {
+            //     editNote(id, firstLetter(noteInput.value.trim()));
+            //     noteText.innerHTML = firstLetter(noteInput.value.trim());
+            //     editButton.innerHTML = '✏️';
+            //     noteText.classList.remove('d-none');
+            //     noteInput.classList.add('d-none');
+            // isEdited = false
+
+            // }
+            // })
         }
     }
 })
