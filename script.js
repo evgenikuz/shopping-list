@@ -18,12 +18,12 @@ form.addEventListener('submit', function(e) {
             shoppingListMain.classList.remove('d-none');
             shoppingListFooter.classList.remove('d-none');
         }
-        addNote(firstLetter(inputForm.value.trim()), false);
+        addNote(firstLetter(inputForm.value.trim()));
         inputForm.value = '';
     }
 })
 
-function addNote(noteText,isChecked) {
+function addNote(noteText,isChecked = false) {
     noteCounter++;
     const note = document.createElement('div');
     note.className = 'note';
@@ -57,6 +57,68 @@ if(localStorage.notes) {
 shoppingList.addEventListener('click', function(e) {
     if(e.target.classList.contains('note__checkbox' || 'note__custom-checkbox' || 'note__text')){
         toCheckId = e.target.closest('label').querySelector('.note__checkbox').getAttribute('id');
-        console.log(toCheckId)
+        e.target.closest('.note').querySelector('.note__text').classList.toggle('checked');
+        e.target.closest('.note').querySelector('.note__checkbox').checked ? checkNote(toCheckId) : uncheckNote(toCheckId);
+    } else if (e.target.classList.contains('note__delete-btn')){ // если нажали на крестик
+        let id = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
+        deleteTask(id, localStorage);
+        e.target.closest('.note').remove(); // удаляем задание
+        isLast(localStorage); // проверка на последний элемент в массиве
+    } else if (e.target.classList.contains('delete-block__delete-checked')){ // если нажали на удалить завершенные
+        let checkboxes = document.querySelectorAll('.note__checkbox');
+        for (el of checkboxes) {
+            if (el.checked) {
+             el.closest('.note').remove()
+            }
+        }
+        deleteChecked(localStorage);
+        isLast(localStorage); // проверка на последний элемент в массиве
+    } else if (e.target.classList.contains('delete-block__delete-all')){ // если нажали на удалить все
+        deleteAll(shoppingListMain)
     }
 })
+
+function checkNote(id) { // добавляем выполнение
+    for (obj of noteArray) {
+        if (obj.id === +id) {
+            obj.isChecked = true;
+            localStorage.setItem('notes', JSON.stringify(noteArray))
+        }
+    }
+}
+function uncheckNote(id) { // снимаем выполнение
+    for (obj of noteArray) {
+        if (obj.id === +id) {
+            obj.isChecked = false;
+            localStorage.setItem('notes', JSON.stringify(noteArray))
+        }
+    }
+}
+function deleteNote(id, localStorage) { // удаляем задание по крестику
+    for (obj of noteArray) {
+        if (obj.id === +id) {
+            noteArray.splice(noteArray.indexOf(obj), 1)
+            localStorage.setItem('notes', JSON.stringify(noteArray))
+        }
+    }
+}
+function isLast(localStorage) { // проверяем, не последний ли это элемент в списке и скрываем кнопки и поле с заданиями
+    if (noteArray.length === 0) {
+        shoppingListMain.classList.add('d-none');
+        shoppingListFooter.classList.add('d-none');
+        localStorage.clear();
+        noteCounter = 0
+    }
+}
+function deleteChecked(localStorage) { // фильтруем массив по признаку не "isChecked = true"
+    noteArray = noteArray.filter(el => !el.isChecked)
+    localStorage.setItem('notes', JSON.stringify(noteArray))
+}
+function deleteAll(notes) { // удаляем со страницы все записи
+    notes.innerHTML = '';
+    noteCounter = 0;
+    localStorage.clear();
+    noteArray = [];
+    shoppingListMain.classList.add('d-none');
+    shoppingListFooter.classList.add('d-none');
+}
