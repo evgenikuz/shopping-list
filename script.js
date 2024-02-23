@@ -76,14 +76,11 @@ shoppingList.addEventListener('click', function(e) {
         isLast(localStorage); // проверка на последний элемент в массиве
     } else if (e.target.classList.contains('delete-block__delete-all')){ // если нажали на удалить все
         deleteAll(shoppingListMain)
-    // } else if (e.target.classList.contains('note__edit-btn') && isEdited === true) {
-        console.log('Нельзя редактировать 2 записи сразу');
     } else if (e.target.classList.contains('note__edit-btn')) {
         let id = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
         let editButton = e.target.closest('.note').querySelector('.note__edit-btn');
         let noteText = e.target.closest('.note').querySelector('.note__text');
         let noteInput = e.target.closest('.note').querySelector('.note__input');
-        // isEdited = true;
         editButton.classList.toggle('tick');
         let editButtonsArray = document.querySelectorAll('.note__edit-btn');
         let isEditedCounter = 0
@@ -92,12 +89,17 @@ shoppingList.addEventListener('click', function(e) {
                 isEditedCounter++;
             }
         }
-        console.log(isEditedCounter);
         isEditedCounter > 1 ? isEdited = true : isEdited = false
-        console.log(isEdited);
         if(isEdited === true) {
             editButton.classList.toggle('tick');
-            console.log('Нельзя редактировать 2 задания одновременно')
+            let editedId;
+            for (let button of editButtonsArray) {
+                if (button.classList.contains('tick')) {
+                    editedId = button.closest('.note').querySelector('.note__checkbox').getAttribute('id')
+                }
+            }
+            editButtonsArray[editedId-1].click(); // имитация клика по кнопке редактируемого инпута
+            editButton.click(); //имитация клика по кнопке, которую уже нажал пользователь для запуска редактирования новой строки
         }
         if (isEdited === false && editButton.classList.contains('tick')){ //если есть класс tick
             noteText.classList.add('d-none'); // убираем р
