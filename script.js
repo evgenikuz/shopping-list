@@ -76,20 +76,34 @@ shoppingList.addEventListener('click', function(e) {
         isLast(localStorage); // проверка на последний элемент в массиве
     } else if (e.target.classList.contains('delete-block__delete-all')){ // если нажали на удалить все
         deleteAll(shoppingListMain)
-    } else if (e.target.classList.contains('note__edit-btn') && isEdited === true) {
+    // } else if (e.target.classList.contains('note__edit-btn') && isEdited === true) {
         console.log('Нельзя редактировать 2 записи сразу');
-    } else if (e.target.classList.contains('note__edit-btn') && isEdited === false) {
+    } else if (e.target.classList.contains('note__edit-btn')) {
         let id = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
         let editButton = e.target.closest('.note').querySelector('.note__edit-btn');
         let noteText = e.target.closest('.note').querySelector('.note__text');
         let noteInput = e.target.closest('.note').querySelector('.note__input');
-        isEdited = true;
+        // isEdited = true;
         editButton.classList.toggle('tick');
-        if (editButton.classList.contains('tick')){ 
-            noteText.classList.add('d-none');
-            noteInput.classList.remove('d-none');
-            editButton.innerHTML = '✅'
-            noteInput.onkeypress = function(e) {
+        let editButtonsArray = document.querySelectorAll('.note__edit-btn');
+        let isEditedCounter = 0
+        for (let button of editButtonsArray) {
+            if (button.classList.contains('tick')) {
+                isEditedCounter++;
+            }
+        }
+        console.log(isEditedCounter);
+        isEditedCounter > 1 ? isEdited = true : isEdited = false
+        console.log(isEdited);
+        if(isEdited === true) {
+            editButton.classList.toggle('tick');
+            console.log('Нельзя редактировать 2 задания одновременно')
+        }
+        if (isEdited === false && editButton.classList.contains('tick')){ //если есть класс tick
+            noteText.classList.add('d-none'); // убираем р
+            noteInput.classList.remove('d-none'); // открываем инпут
+            editButton.innerHTML = '✅' // меняем кнопку на галку
+            noteInput.onkeypress = function(e) { // функция по нажатию на энтер
                 let key = e.which || e.keyCode
                 if (key === 13) {
                     if(noteInput.value.trim() === '') {
@@ -105,7 +119,7 @@ shoppingList.addEventListener('click', function(e) {
                     }
                 }
             }
-            editButton.addEventListener('click', function() {
+            editButton.addEventListener('click', function() { // функция по нажатию на кнопку
                 editButton.classList.toggle('tick');
                 editButton.classList.contains('tick') ? editButton.innerHTML = '✅' : editButton.innerHTML = '✏️'
                 if(noteInput.value.trim() === '') {
@@ -114,17 +128,20 @@ shoppingList.addEventListener('click', function(e) {
                     editNote(id, firstLetter(noteInput.value.trim()));
                     noteText.innerHTML = firstLetter(noteInput.value.trim());
                     editButton.classList.toggle('tick');
-                    isEdited = false;
+                    // isEdited = false;
                 }
             })
-        } else {
-            noteText.classList.remove('d-none');
-            noteInput.classList.add('d-none');
-            editButton.innerHTML = '✏️';
-            isEdited = false;
+            // isEdited = true;
+        } else { // else для того, чтобы завершение по клику не путало программу, если tick нет, то:
+            noteText.classList.remove('d-none'); // возвращаем р
+            noteInput.classList.add('d-none'); // убираем инпут
+            editButton.innerHTML = '✏️'; // меняем кнопку на карандаш
+            // isEditedCounter++;
+            // isEdited = false; // приравниваем к false isEdited
         }
     }
-    console.log(isEdited);    
+    // console.log(e.target.closest('.note').querySelector('.note__edit-btn').innerHTML);
+    // console.log(isEditedCounter);    
 })
 
 function checkNote(id) { // добавляем выполнение
@@ -178,4 +195,5 @@ function editNote(id, value) {
             localStorage.setItem('notes', JSON.stringify(noteArray))
         }
     }
+    // isEditedCounter--;
 }
