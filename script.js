@@ -84,17 +84,19 @@ shoppingList.addEventListener('click', function(e) {
         let noteText = e.target.closest('.note').querySelector('.note__text');
         let noteInput = e.target.closest('.note').querySelector('.note__input');
         isEdited = true;
-        editButton.innerHTML = '✅';
-        noteText.classList.add('d-none');
-        noteInput.classList.remove('d-none');
-        if (editButton.innerHTML === '✅') {
-            noteInput.onkeypress = function(e) { // работает
+        editButton.classList.toggle('tick');
+        if (editButton.classList.contains('tick')){ 
+            noteText.classList.add('d-none');
+            noteInput.classList.remove('d-none');
+            editButton.innerHTML = '✅'
+            noteInput.onkeypress = function(e) {
                 let key = e.which || e.keyCode
                 if (key === 13) {
                     if(noteInput.value.trim() === '') {
                         noteInput.classList.add('error')
                     } else {
                         editNote(id, firstLetter(noteInput.value.trim()));
+                        editButton.classList.toggle('tick');
                         noteText.innerHTML = firstLetter(noteInput.value.trim());
                         editButton.innerHTML = '✏️';
                         noteText.classList.remove('d-none');
@@ -103,21 +105,26 @@ shoppingList.addEventListener('click', function(e) {
                     }
                 }
             }
-            // editButton.addEventListener('click', function() { // не работает из-за нажатия на кнопку повторного стр 79
-            // if(noteInput.value.trim() === '') {
-            //     noteInput.classList.add('error')
-            // } else {
-            //     editNote(id, firstLetter(noteInput.value.trim()));
-            //     noteText.innerHTML = firstLetter(noteInput.value.trim());
-            //     editButton.innerHTML = '✏️';
-            //     noteText.classList.remove('d-none');
-            //     noteInput.classList.add('d-none');
-            // isEdited = false
-
-            // }
-            // })
+            editButton.addEventListener('click', function() {
+                editButton.classList.toggle('tick');
+                editButton.classList.contains('tick') ? editButton.innerHTML = '✅' : editButton.innerHTML = '✏️'
+                if(noteInput.value.trim() === '') {
+                    noteInput.classList.add('error')
+                } else {
+                    editNote(id, firstLetter(noteInput.value.trim()));
+                    noteText.innerHTML = firstLetter(noteInput.value.trim());
+                    editButton.classList.toggle('tick');
+                    isEdited = false;
+                }
+            })
+        } else {
+            noteText.classList.remove('d-none');
+            noteInput.classList.add('d-none');
+            editButton.innerHTML = '✏️';
+            isEdited = false;
         }
     }
+    console.log(isEdited);    
 })
 
 function checkNote(id) { // добавляем выполнение
