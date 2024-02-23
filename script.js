@@ -115,7 +115,6 @@ shoppingList.addEventListener('click', function(e) {
                         editButton.innerHTML = '✏️';
                         noteText.classList.remove('d-none');
                         noteInput.classList.add('d-none');
-                        isEdited = false
                     }
                 }
             }
@@ -128,20 +127,14 @@ shoppingList.addEventListener('click', function(e) {
                     editNote(id, firstLetter(noteInput.value.trim()));
                     noteText.innerHTML = firstLetter(noteInput.value.trim());
                     editButton.classList.toggle('tick');
-                    // isEdited = false;
                 }
             })
-            // isEdited = true;
         } else { // else для того, чтобы завершение по клику не путало программу, если tick нет, то:
             noteText.classList.remove('d-none'); // возвращаем р
             noteInput.classList.add('d-none'); // убираем инпут
             editButton.innerHTML = '✏️'; // меняем кнопку на карандаш
-            // isEditedCounter++;
-            // isEdited = false; // приравниваем к false isEdited
         }
-    }
-    // console.log(e.target.closest('.note').querySelector('.note__edit-btn').innerHTML);
-    // console.log(isEditedCounter);    
+    }  
 })
 
 function checkNote(id) { // добавляем выполнение
