@@ -77,28 +77,31 @@ shoppingList.addEventListener('click', function(e) {
     } else if (e.target.classList.contains('delete-block__delete-all')){ // если нажали на удалить все
         deleteAll(shoppingListMain)
     } else if (e.target.classList.contains('note__edit-btn')) {
+        // вводим переменные
         let id = e.target.closest('.note').querySelector('.note__checkbox').getAttribute('id');
         let editButton = e.target.closest('.note').querySelector('.note__edit-btn');
         let noteText = e.target.closest('.note').querySelector('.note__text');
         let noteInput = e.target.closest('.note').querySelector('.note__input');
         editButton.classList.toggle('tick');
+       
         let editButtonsArray = document.querySelectorAll('.note__edit-btn');
-        let isEditedCounter = 0
-        for (let button of editButtonsArray) {
+        let isEditedCounter = 0 
+        for (let button of editButtonsArray) { // считает, сколько сейчас полей редактируется
             if (button.classList.contains('tick')) {
                 isEditedCounter++;
             }
         }
-        isEditedCounter > 1 ? isEdited = true : isEdited = false
+        isEditedCounter > 1 ? isEdited = true : isEdited = false // если редактируется больше 1 поля, то isEdited = true
+
         if(isEdited === true) { //если что-то еще редактируется
-            editButton.classList.toggle('tick');
+            editButton.classList.toggle('tick'); // для того, чтобы нивелировать первое нажатие пользователя (без этого не работает  редактирование сверху вниз)
             let editedId;
-            for (let button of editButtonsArray) {
+            for (let button of editButtonsArray) { // выясняем, какая запись уже редактируется (ее id)
                 if (button.classList.contains('tick')) {
                     editedId = button.closest('.note').querySelector('.note__checkbox').getAttribute('id')
                 }
             }
-            editButtonsArray[editedId-1].click(); // имитация клика по кнопке редактируемого инпута
+            editButtonsArray[editedId-1].click(); // имитация клика по кнопке редактируемого инпута для завершения первого редактирования
             editButton.click(); //имитация клика по кнопке, которую уже нажал пользователь для запуска редактирования новой строки
         }
         if (isEdited === false && editButton.classList.contains('tick')){ //если ничего не редактируется и есть класс tick

@@ -82,14 +82,9 @@ shoppingList.addEventListener('click', function(e) {
         let noteText = e.target.closest('.note').querySelector('.note__text');
         let noteInput = e.target.closest('.note').querySelector('.note__input');
         editButton.classList.toggle('tick');
-        let editButtonsArray = document.querySelectorAll('.note__edit-btn');
-        let isEditedCounter = 0
-        for (let button of editButtonsArray) {
-            if (button.classList.contains('tick')) {
-                isEditedCounter++;
-            }
-        }
-        isEditedCounter > 1 ? isEdited = true : isEdited = false
+
+        isEdited(); // функция возвращает isEdited
+        
         if(isEdited === true) { //если что-то еще редактируется
             editButton.classList.toggle('tick');
             let editedId;
@@ -191,4 +186,15 @@ function editNote(id, value) {
         }
     }
     // isEditedCounter--;
+}
+function isEdited() {
+    let editButtonsArray = document.querySelectorAll('.note__edit-btn');
+        let isEditedCounter = 0
+        for (let button of editButtonsArray) {
+            if (button.classList.contains('tick')) {
+                isEditedCounter++;
+            }
+        }
+        isEditedCounter > 1 ? isEdited = true : isEdited = false
+    return isEdited
 }
