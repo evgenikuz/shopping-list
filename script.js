@@ -99,10 +99,7 @@ shoppingList.addEventListener('click', function(e) {
                 }
             }
             editButtonsArray[editedId-1].click(); // имитация клика по кнопке редактируемого инпута
-            let noteInputArray = document.querySelectorAll('.note__input');
-            if (noteInputArray[editedId-1].value.trim() !== '') { // проверка, что предыдущее поле заполнено
-                editButton.click(); //имитация клика по кнопке, которую уже нажал пользователь для запуска редактирования новой строки
-            }
+            editButton.click(); //имитация клика по кнопке, которую уже нажал пользователь для запуска редактирования новой строки
         }
         if (isEdited === false && editButton.classList.contains('tick')){ //если ничего не редактируется и есть класс tick
             noteText.classList.add('d-none'); // убираем р
@@ -175,7 +172,8 @@ function deleteAll(notes) { // удаляем со страницы все за�
 function editNote(id, noteInput, noteText, editButton) {
     editButton.classList.contains('tick') ? editButton.innerHTML = '✅' : editButton.innerHTML = '✏️'
     if(noteInput.value.trim() === '') {
-        noteInput.classList.add('error')
+        noteInput.value = noteText.innerHTML;
+        editButton.classList.toggle('tick');
     } else {
         for (obj of noteArray) {
             if(obj.id === +id) {
