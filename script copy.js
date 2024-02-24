@@ -99,10 +99,7 @@ shoppingList.addEventListener('click', function(e) {
                 }
             }
             editButtonsArray[editedId-1].click(); // имитация клика по кнопке редактируемого инпута
-            let noteInputArray = document.querySelectorAll('.note__input');
-            if (noteInputArray[editedId-1].value.trim() !== '') { // проверка, что предыдущее поле заполнено
-                editButton.click(); //имитация клика по кнопке, которую уже нажал пользователь для запуска редактирования новой строки
-            }
+            editButton.click(); //имитация клика по кнопке, которую уже нажал пользователь для запуска редактирования новой строки
         }
         if (isEdited === false && editButton.classList.contains('tick')){ //если ничего не редактируется и есть класс tick
             noteText.classList.add('d-none'); // убираем р
@@ -111,14 +108,28 @@ shoppingList.addEventListener('click', function(e) {
             noteInput.onkeypress = function(e) { // функция по нажатию на энтер
                 let key = e.which || e.keyCode
                 if (key === 13) {
-                    editNote(id, noteInput, noteText, editButton);
-                    noteText.classList.remove('d-none');
-                    noteInput.classList.add('d-none');
+                    if(noteInput.value.trim() === '') {
+                        noteInput.classList.add('error')
+                    } else {
+                        editNote(id, firstLetter(noteInput.value.trim()));
+                        editButton.classList.toggle('tick');
+                        noteText.innerHTML = firstLetter(noteInput.value.trim());
+                        editButton.innerHTML = '✏️';
+                        noteText.classList.remove('d-none');
+                        noteInput.classList.add('d-none');
+                    }
                 }
             }
             editButton.addEventListener('click', function() { // функция по нажатию на кнопку
                 editButton.classList.toggle('tick');
-                editNote(id, noteInput, noteText, editButton);
+                editButton.classList.contains('tick') ? editButton.innerHTML = '✅' : editButton.innerHTML = '✏️'
+                if(noteInput.value.trim() === '') {
+                    noteInput.classList.add('error')
+                } else {
+                    editNote(id, firstLetter(noteInput.value.trim()));
+                    noteText.innerHTML = firstLetter(noteInput.value.trim());
+                    editButton.classList.toggle('tick');
+                }
             })
         } else { // else для того, чтобы завершение по клику не путало программу, если tick нет, то:
             noteText.classList.remove('d-none'); // возвращаем р
@@ -172,19 +183,12 @@ function deleteAll(notes) { // удаляем со страницы все за�
     shoppingListMain.classList.add('d-none');
     shoppingListFooter.classList.add('d-none');
 }
-function editNote(id, noteInput, noteText, editButton) {
-    editButton.classList.contains('tick') ? editButton.innerHTML = '✅' : editButton.innerHTML = '✏️'
-    if(noteInput.value.trim() === '') {
-        noteInput.classList.add('error')
-    } else {
-        for (obj of noteArray) {
-            if(obj.id === +id) {
-                obj.text = firstLetter(noteInput.value.trim());
-                localStorage.setItem('notes', JSON.stringify(noteArray))
-            }
+function editNote(id, value) {
+    for (obj of noteArray) {
+        if(obj.id === +id) {
+            obj.text = value;
+            localStorage.setItem('notes', JSON.stringify(noteArray))
         }
-        noteText.innerHTML = firstLetter(noteInput.value.trim());
-        editButton.classList.toggle('tick');
     }
-    editButton.classList.contains('tick') ? editButton.innerHTML = '✅' : editButton.innerHTML = '✏️'
+    // isEditedCounter--;
 }
